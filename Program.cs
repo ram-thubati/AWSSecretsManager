@@ -1,6 +1,7 @@
 ﻿using Amazon;
 using Amazon.SecretsManager;
 using Amazon.SecretsManager.Model;
+using System.Text.Json;
 
 namespace AWSSecretsManager {
     public class SecretsManager {
@@ -43,7 +44,14 @@ namespace AWSSecretsManager {
         {
             var secretName = "periodic/dev/rds/admin";
             var regionName = "us-east-1";
-            Console.WriteLine(GetSecret(secretName, regionName));
+
+            var secret_text = GetSecret(secretName, regionName);
+
+            var values = JsonSerializer.Deserialize<Dictionary<string,object>>(secret_text);
+
+            //get username
+            Console.WriteLine(values["username"]);
+            Console.WriteLine(values["password"]);
         }
     }
 }
